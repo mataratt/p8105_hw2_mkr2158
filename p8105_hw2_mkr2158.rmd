@@ -180,7 +180,11 @@ Read and cleaning the zillow datasets.
 ```{r}
 zipcodes_df = 
   read_csv("zillow_data/zip_codes.csv", na = c("NA", ".", "")) |> 
-  janitor::clean_names()
+  janitor::clean_names() |> 
+  mutate(
+    county = recode(county, "New York" = "Manhattan", "Kings" = "Brooklyn", "Richmond" = "Staten Island", "Queens" = "Queens", "Bronx" = "Bronx")
+  ) |> 
+  rename(borough = county)
 ```
 
 Read and clean zori dataset.
@@ -196,19 +200,20 @@ zori_df =
     ) |> 
   mutate(
     date = str_remove(date, "x"),
-    date = ymd(date),
-    year = year(date),
-    month = month(date, label = TRUE),
-    county_name = str_remove(county_name, "County"),
+    county_name = recode(county_name, "New York County" = "Manhattan", "Kings County" = "Brooklyn", "Richmond County" = "Staten Island", "Queens County" = "Queens", "Bronx County" = "Bronx")
   ) |> 
     rename(
-      county = county_name,
-      zip_code = region_name)
+      borough = county_name,
+      zip_code = region_name) |> 
+    select(-region_type, -state_name)
 ```
 
+Merging `zipcode` and `zori` dataset.
 
-
-
+```{r}
+zillowmerge_df = 
+  left_join(zori_df, zipcodes_df, by = c("zip_code", "borough"), relationship = "many-to-many")
+```
 
 
 
