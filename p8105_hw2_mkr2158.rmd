@@ -1,0 +1,26 @@
+---
+title: "p8105_hw2_mkr2158"
+author: "Matariya Rattanapan"
+UNI: "mkr2158"
+output: github_document
+date: "2025-09-30"
+---
+
+Loading tidyverse
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+## Problem 1
+
+Cleaning up the pols-month dataset.
+
+```{r}
+pols_df = 
+  read_csv("fivethirtyeight_datasets/pols-month.csv", na = c("NA", ".", "")) |> 
+  janitor::clean_names() |> 
+  separate(mon, into = c("year", "month", "day"), sep = "-")
+```
+
