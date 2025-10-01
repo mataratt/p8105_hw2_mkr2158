@@ -104,6 +104,18 @@ mrtrash_df =
   rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
 ```
 
+Read and clean Professor Trash Wheel sheet
+
+```{r}
+proftrash_df =
+  read_excel("Trash_Wheel_Collection_Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M709",na = c("NA", ".", ""), skip = 1) |> 
+  janitor::clean_names() |> 
+  filter(!is.na(dumpster)) |> 
+  mutate(
+    wheel = "prof"
+  ) |> 
+  rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
+```
 
 
 
