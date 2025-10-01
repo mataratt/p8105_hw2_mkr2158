@@ -117,6 +117,18 @@ proftrash_df =
   rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
 ```
 
+Read and clean Gwynnda Trash Wheel sheet
+
+```{r}
+gwynnda_df =
+  read_excel("Trash_Wheel_Collection_Data.xlsx", sheet = "Gwynns Falls Trash Wheel", range = "A2:L709",na = c("NA", ".", ""), skip = 1) |> 
+  janitor::clean_names() |> 
+  filter(!is.na(dumpster)) |> 
+  mutate(
+    wheel = "gwynns"
+  ) |> 
+  rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
+```
 
 
 
