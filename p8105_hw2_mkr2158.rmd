@@ -31,3 +31,33 @@ pols_df =
   select(-prez_dem, -prez_gop, -day,everything())
 ```
 
+Cleaning up the snp dataset.
+
+```{r}
+snp_df =
+  read_csv("fivethirtyeight_datasets/snp.csv", na = c("NA", ".", "")) |> 
+  janitor::clean_names() |> 
+  separate(date, into = c("month", "day", "year"), sep = "/") |> 
+  mutate(
+    month = recode(month,"1" = "January", "2" = "February", "3" = "March", "4" = "April", "5" = "May", "6" = "June", "7"= "July", "8" = "August", "9" = "September", "10" = "October", "11" = "November", "12" = "December"),
+    year = case_when(
+      as.numeric(year) >= 50 ~ paste0("19", year),
+      as.numeric(year) < 50 ~ paste0("20", year)
+    )
+  ) |> 
+  arrange(year, month) |> 
+  select(year, month, close)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
