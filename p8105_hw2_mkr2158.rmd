@@ -196,7 +196,7 @@ zori_df =
   pivot_longer(
     cols = x2015_01_31:x2024_08_31,
     names_to = "date",
-    values_to = "rent_index"
+    values_to = "rent"
     ) |> 
   mutate(
     date = str_remove(date, "x"),
@@ -212,8 +212,28 @@ Merging `zipcode` and `zori` dataset.
 
 ```{r}
 zillowmerge_df = 
-  left_join(zori_df, zipcodes_df, by = c("zip_code", "borough"), relationship = "many-to-many")
+  left_join(zori_df, zipcodes_df, by = c("zip_code", "borough")) |> 
+  arrange(rent) |> 
+  relocate(borough, neighborhood, zip_code, rent, date)
 ```
+
+
+The resulting tidy dataset `zillowmerge_df` contains `r nrow(zillowmerge_df)` observations and contains `r ncol(zillowmerge_df)` variables. Key variables include borough (Manhattan, Brooklyn, Queens, Bronx, and Staten Island), neighborhood, zip code, rent, and date. There are a total of `r length(unique(pull(zillowmerge_df, zip_code)))` unique zip codes. There are a total of `r length(unique(na.omit(pull(zillowmerge_df, neighborhood))))` unique neighborhoods.
+
+
+
+Figuring out which zip codes appear in `zip_code` dataset but NOT in `zori` dataset.
+
+```{r}
+zip_zipcode_df =
+  unique(pull(zipcodes_df, zip_code))
+
+zip_zori_df =
+  unique(pull(zori_df, zip_code))
+```
+
+There are `r length(setdiff(zip_zipcode_df, zip_zori_df))` zipcodes that appear in the `zip code` dataset but is not in the `zori` (Zillow Rental Price) dataset. These zips codes might have been excluded from the Zillow dataset for a variety of reasons. For one, Zillow is a real estate platform and may not include zip codes for areas where there is not much real estate (i.e. unhabitated areas). Another reason could be the zip codes cover non-residential usage areas such as commercial or governmental use. Within these areas, there may be less homes available for Zillow to feature for rent or for sale. Another possible reason is some zip codes are used specifically for Post Office boxes or PO boxes. These would evidently not be within Zillow's database for homes for rent/sale. 
+
 
 
 
