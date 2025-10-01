@@ -170,3 +170,30 @@ total_gwynn_cig = trashfinal_df |>
 ```
 
 The total number of cigarette butts collected by Gwynnda in June of 2022 is `r total_gwynn_cig`.
+
+
+
+## Problem 3
+
+Read and cleaning the zillow datasets.
+
+```{r}
+zipcodes_df = 
+  read_csv("zillow_data/zip_codes.csv", na = c("NA", ".", "")) |> 
+  janitor::clean_names() |> 
+  mutate(
+    county=recode(county, "Kings" = "Brooklyn", "New York" = "Manhattan")
+  ) |> 
+  rename(borough=county) |> 
+  select(borough, zip_code, file_date, neighborhood)
+```
+
+
+
+
+
+
+
+
+
+
