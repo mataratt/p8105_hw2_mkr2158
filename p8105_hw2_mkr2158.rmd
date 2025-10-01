@@ -88,6 +88,21 @@ The dataset from `pols_df` was cleaned up and contains `r nrow(pols_df)` observa
 
 
 
+## Problem 2
+
+Read and clean the Mr. Trash Wheel sheet
+
+```{r}
+mrtrash_df =
+  read_excel("Trash_Wheel_Collection_Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N709",na = c("NA", ".", ""), skip = 1) |> 
+  janitor::clean_names() |> 
+  filter(!is.na(dumpster)) |> 
+  mutate(
+    sports_balls = as.integer(round(sports_balls)),
+    wheel = "mr"
+  ) |> 
+  rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
+```
 
 
 
