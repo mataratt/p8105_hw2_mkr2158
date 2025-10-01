@@ -49,8 +49,25 @@ snp_df =
   select(year, month, close)
 ```
 
+Cleaning up unemployment dataset.
 
+```{r}
+unemploy_df =
+  read_csv("fivethirtyeight_datasets/unemployment.csv", na = c("NA", ".", "")) |> 
+  janitor::clean_names() |> 
+  pivot_longer(
+    cols = jan:dec,
+    names_to = "month",
+    values_to = "unemployment_pct"
+  ) |> 
+  mutate(
+    month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "may" = "May", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December")
+  ) |> 
+  arrange(year, month) |> 
+  select(year, month, unemployment_pct)
+```
 
+Merging the cleaned up pols-month, snp, and unemployment datasets. 
 
 
 
