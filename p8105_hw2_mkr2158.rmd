@@ -28,7 +28,7 @@ pols_df =
       prez_gop == 1 ~ "gop",
       prez_dem == 1 ~ "dem"
     )) |> 
-  select(-prez_dem, -prez_gop, -day,everything())
+  select(-prez_dem, -prez_gop, -day)
 ```
 
 Cleaning up the snp dataset.
@@ -78,8 +78,13 @@ finalmerge_df =
   left_join(merged_df, unemploy_df, by = c("year", "month"))
 ```
 
+Using the `knitr::kable` function to check to see our final merged data was created successfully.
 
+```{r}
+knitr::kable(head(finalmerge_df, 5))
+```
 
+The dataset from `pols_df` was cleaned up and contains `r nrow(pols_df)` observations and `r ncol(pols_df)` variables. It contains important variables describing the number of democratic or republican politicians at the associated years and months, including the presidents, governors, senators, and representatives. The dataset from `snp_df` was cleaned up and contains `r nrow(snp_df)` observations and `r ncol(snp_df)` variables. It contains the closing value of the Standard & Poor's (S&P) stock market index at the associated years and months. The dataset from `unemployment` was cleaned up and contained `r nrow(unemploy_df)` observations and `r ncol(unemploy_df)` variables. It contains the percentage of unemployment at the associated years and months, respectively. Our final dataset `finalmerge_df` contains `r nrow(finalmerge_df)` observations and `r ncol(finalmerge_df)` variables. The range of year for our final merged dataset is from January 1947 to June 2015. Key variables in our final dataset include the `year`, `month`, `president`, `close`, and `unemployment_pct`.
 
 
 
