@@ -104,6 +104,8 @@ mrtrash_df =
   rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
 ```
 
+
+
 Read and clean Professor Trash Wheel sheet
 
 ```{r}
@@ -117,6 +119,8 @@ proftrash_df =
   ) |> 
   rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
 ```
+
+
 
 Read and clean Gwynnda Trash Wheel sheet
 
@@ -132,6 +136,8 @@ gwynnda_df =
   rename(weight = weight_tons, volume = volume_cubic_yards, cigarette = cigarette_butts)
 ```
 
+
+
 Merging Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel into one dataset
 
 ```{r}
@@ -139,5 +145,28 @@ trashfinal_df =
   bind_rows(mrtrash_df, proftrash_df, gwynnda_df)
 ```
 
+The final dataset after cleaning up and merging the data sets together contains `r nrow(trashfinal_df)` observations and `r ncol(trashfinal_df)` variables. Key variables include `weight` of the trash collected in tons, `volume` of trash collected in cubic yards, and types of litter such as `plastic bottles`, `polystyrene`, `cigarette buds`, `glass bottles`, `plastic bags`, `sports balls`, and `wrappers`. 
 
 
+
+Calculating the total weight of trash collected by Professor Trash Wheel
+
+```{r}
+total_prof_weight = trashfinal_df |> 
+  filter(wheel=="prof") |> 
+  summarise(total_weight=sum(weight, na.rm = TRUE))
+```
+
+The total weight of trash collected by Professor Trash Wheel is `r total_prof_weight` tons.
+
+
+
+Calculating the total number of cigarette butts collected by Gwynnda in June of 2022.
+
+```{r}
+total_gwynn_cig = trashfinal_df |> 
+  filter(wheel == "gwynns", month == "June", year == 2022) |> 
+  summarise(total_cigs=sum(cigarette, na.rm = TRUE))
+```
+
+The total number of cigarette butts collected by Gwynnda in June of 2022 is `r total_gwynn_cig`.
