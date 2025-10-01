@@ -61,13 +61,23 @@ unemploy_df =
     values_to = "unemployment_pct"
   ) |> 
   mutate(
-    month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "may" = "May", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December")
+    month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "may" = "May", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December"),
+    year = as.character(year)
   ) |> 
   arrange(year, month) |> 
   select(year, month, unemployment_pct)
 ```
 
 Merging the cleaned up pols-month, snp, and unemployment datasets. 
+
+```{r}
+merged_df =
+  left_join(pols_df, snp_df, by = c("year", "month"))
+
+finalmerge_df =
+  left_join(merged_df, unemploy_df, by = c("year", "month"))
+```
+
 
 
 
