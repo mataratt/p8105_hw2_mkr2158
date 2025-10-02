@@ -177,7 +177,7 @@ The total number of cigarette butts collected by Gwynnda in June of 2022 is `r t
 
 Read and cleaning the zillow datasets.
 
-```{r}
+```{r, message = FALSE}
 zipcodes_df = 
   read_csv("zillow_data/zip_codes.csv", na = c("NA", ".", "")) |> 
   janitor::clean_names() |> 
@@ -189,7 +189,7 @@ zipcodes_df =
 
 Read and clean zori dataset.
 
-```{r}
+```{r, message = FALSE}
 zori_df =
   read_csv("zillow_data/zori_nyc.csv", na = c("NA", ".", "")) |> 
   janitor::clean_names() |> 
@@ -224,14 +224,12 @@ The resulting tidy dataset `zillowmerge_df` contains `r nrow(zillowmerge_df)` ob
 
 Figuring out which zip codes appear in `zip_code` dataset but NOT in `zori` dataset.
 
-```{r}
+```{r, message = FALSE}
 zip_zipcode_df =
   unique(pull(zipcodes_df, zip_code))
 
 zip_zori_df =
   unique(pull(zori_df, zip_code))
-
-length(setdiff(zip_zipcode_df, zip_zori_df))
 ```
 
 There are `r length(setdiff(zip_zipcode_df, zip_zori_df))` zipcodes that appear in the `zip code` dataset but is not in the `zori` (Zillow Rental Price) dataset. These zips codes might have been excluded from the Zillow dataset for a variety of reasons. For one, Zillow is a real estate platform and may not include zip codes for areas where there is not much real estate (i.e. unhabitated areas). Another reason could be the zip codes cover non-residential usage areas such as commercial or governmental use. Within these areas, there may be less homes available for Zillow to feature for rent or for sale. Another possible reason is some zip codes are used specifically for Post Office boxes or PO boxes. These would evidently not be within Zillow's database for homes for rent/sale. 
@@ -252,8 +250,7 @@ jan_rent_change =
     rent_change = jan_2021 - jan_2020
   ) |> 
   arrange(rent_change) |> 
-  select(borough, neighborhood, zip_code, jan_2020, jan_2021, rent_change) |> 
-  na.omit(rent_change)
+  select(borough, neighborhood, zip_code, jan_2020, jan_2021, rent_change)
 
   knitr::kable(head(jan_rent_change,10))
 ```
