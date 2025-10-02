@@ -250,13 +250,13 @@ jan_rent_change =
     rent_change = jan_2021 - jan_2020
   ) |> 
   arrange(rent_change) |> 
-  select(borough, neighborhood, zip_code, jan_2020, jan_2021, rent_change)
+  select(borough, neighborhood, zip_code, jan_2020, jan_2021, rent_change) |> 
+  drop_na(rent_change)
 
   knitr::kable(head(jan_rent_change,10))
 ```
 
 Based off our table, we can see that Lower Manhattan, Manhattan had the largest drop in rental price, from January 2020 to January 2021 from `r round(max(pull(jan_rent_change, jan_2020)), 2)` USD to `r round(max(pull(jan_rent_change, jan_2021)), 2)` USD, a `r round(min(pull(jan_rent_change, rent_change)), 2)` USD difference.
-
 
 
 
